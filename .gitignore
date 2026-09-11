@@ -1,0 +1,29 @@
+# 1. Node Modules (খুবই ভারী ফাইল, গিটহাবে দেওয়ার দরকার নেই)
+node_modules/
+
+# 2. Environment Variables (আপনার Supabase ও API এর সিক্রেট লিংক)
+.env
+.env.local
+.env.*
+
+# 3. Sensitive Google Credentials (Google API এর চাবি)
+credentials.json
+service-account.json
+
+# 4. Local Backups (লোকাল ব্যাকআপের JSON ফাইলগুলো)
+backups/
+database_backup_*.json
+*.csv
+
+# 5. User Uploaded Files (স্টুডেন্টদের আপলোড করা ছবি বা ফাইল)
+uploads/
+public/uploads/
+
+# 6. Logs (সার্ভারের ক্র্যাশ বা এরর লগ)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 7. OS Generated Files (উইন্ডোজ বা ম্যাকের অটোমেটিক ফাইল)
+.DS_Store
+Thumbs.db
