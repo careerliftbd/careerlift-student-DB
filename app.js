@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path'); // ✅ Vercel-এর জন্য path যুক্ত করা হলো
 require('dotenv').config();
 
 const app = express();
@@ -9,8 +10,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Frontend (public ফোল্ডার) কানেক্ট করা হলো (.html এক্সটেনশন অটোমেটিক ধরবে)
-app.use(express.static('public', { extensions: ['html', 'htm'] }));
+// ✅ Frontend (public ফোল্ডার) কানেক্ট করা হলো (Absolute path সহ)
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html', 'htm'] }));
+
+// ✅ Vercel-এ Cannot GET / এরর সমাধানের জন্য হোমপেজ রাউট
+app.get('/', (req, res) => {
+    // ⚠️ আপনার মেইন পেজ বা লগইন পেজটি যদি 'login.html' হয়, তবে নিচে 'index.html' এর জায়গায় 'login.html' দিন
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // ✅ Auth API
 const authRoutes = require('./routes/authRoutes');
@@ -31,35 +38,12 @@ app.get('/api/status', (req, res) => {
 
 
 /* 
-// ⚠️ Temporary Setup Route (আপনার অ্যাকাউন্ট ইতোমধ্যে তৈরি হয়ে গেছে, তাই সিকিউরিটির জন্য এটি বন্ধ করে দেওয়া হলো)
-app.get('/setup', async (req, res) => {
-    const bcrypt = require('bcrypt');
-    const supabase = require('./supabaseClient');
-
-    try {
-        const hashedPassword = await bcrypt.hash('123456', 10);
-        
-        const { data, error } = await supabase
-            .from('admins')
-            .insert([{
-                name: 'Super Admin',
-                email: 'careerliftbd@gmail.com',
-                password_hash: hashedPassword,
-                is_approved: true
-            }]);
-
-        if (error) {
-            return res.json({ success: false, error: error.message });
-        }
-        
-        res.json({ success: true, message: "অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! এবার লগইন পেজে গিয়ে লগইন করুন।" });
-    } catch (err) {
-        res.json({ error: err.message });
-    }
-});
+// ⚠️ Temporary Setup Route (বন্ধ করে দেওয়া হলো)
+app.get('/setup', async (req, res) => { ... });
 */
 
-// Server Listen (আগের কোড)
+
+// Server Listen
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`[+] Server running at http://localhost:${PORT}`);
