@@ -59,9 +59,11 @@ app.get('/setup', async (req, res) => {
 });
 */
 
-
-// Server Listen
+// Server Listen (আগের কোড)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`[+] Server running at http://localhost:${PORT}`);
 });
+
+// Vercel এর জন্য export করা হলো
+module.exports = app;
